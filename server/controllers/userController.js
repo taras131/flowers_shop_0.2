@@ -31,11 +31,11 @@ class UserController {
     async login(req, res, next) {
         const {email, password} = req.body
         const user = await User.findOne({where: {email}})
-        if(!user){
+        if (!user) {
             return next(ApiError.badRequest("Пользователь не найден"))
         }
         const comparePassword = bcrypt.compareSync(password, user.password)
-        if(!comparePassword){
+        if (!comparePassword) {
             return next(ApiError.badRequest("Неверный пароль"))
         }
         const token = generateJwt(user.id, user.email, user.role)
@@ -43,11 +43,18 @@ class UserController {
     }
 
     async chek(req, res) {
-        console.log(req.user)
         const token = generateJwt(req.user.id, req.user.email, req.user.role)
         return res.json({token})
+    }
 
-
+    async getOne(req, res) {
+        const {id} = req.params
+        const user = await User.findOne({where: {id}})
+        return res.json(user)
+    }
+    async getAll(req, res) {
+        const users = await User.findAll()
+        return res.json(users)
     }
 }
 
