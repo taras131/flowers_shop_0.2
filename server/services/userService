@@ -1,0 +1,18 @@
+const {User, Basket} = require('../models/models')
+
+class UserService {
+    async cleanNotAuthUser() {
+        const users = await User.findAll({where: {role: "NOT_AUTH"}})
+        const currentDate = + new Date
+        for (const item of users) {
+            console.log(currentDate - item.createdAt)
+            if(currentDate - item.createdAt > 86400000){
+                const id = item.id
+                await User.destroy({where: {id}})
+                await Basket.destroy({where: {userId: id}})
+            }
+        }
+    }
+}
+
+module.exports = new UserService()

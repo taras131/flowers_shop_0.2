@@ -5,15 +5,20 @@ class BasketController {
     async add(req, res, next) {
         try {
             const {productId, price} = req.body
-            console.log(price)
             const product = await BasketProduct.findOne({where: {basketId: req.user.id, productId}})
-            if (product) {
-                product.count = product.count + 1
-                await product.save()
-                return res.json(product)
+            if (req.user.id){
+                if (product) {
+                    product.count = product.count + 1
+                    await product.save()
+                    return res.json(product)
+                }
+                const newProduct = await BasketProduct.create({basketId: req.user.id, productId, price})
+                return res.json(newProduct)
+            } else{
+                console.log("dont auth")
             }
-            const newProduct = await BasketProduct.create({basketId: req.user.id, productId, price})
-            return res.json(newProduct)
+
+
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }

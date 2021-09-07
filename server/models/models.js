@@ -72,5 +72,5 @@ Product.hasMany(OrderProduct)
 OrderProduct.belongsTo(Product)
 
 module.exports = {
-    User, Basket, BasketProduct, Type, Product, Order, OrderProduct, Setting
+    User, Basket, BasketProduct, Type, Product, Order, OrderProduct, Setting,
 }

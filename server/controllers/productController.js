@@ -2,6 +2,7 @@ const uuid = require('uuid')
 const path = require('path')
 const {Product} = require('../models/models')
 const ApiError = require('../error/ApiError')
+const fs = require('fs');
 
 class ProductController {
     async create(req, res, next) {
@@ -64,7 +65,8 @@ class ProductController {
     async delete(req, res, next){
         try {
             const {id} = req.params
-            console.log(id)
+            const product = await Product.findOne({where: {id}})
+            fs.unlinkSync(path.resolve(__dirname, "..", "static", product.img));
             const data = await Product.destroy({where:{id}})
             return res.json(data)
         } catch (e) {
