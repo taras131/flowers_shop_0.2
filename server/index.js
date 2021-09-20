@@ -25,7 +25,7 @@ const start = async () => {
         app.listen(PORT, () => {
             console.log("server start " + PORT)
         })
-        setInterval(() => userService.cleanNotAuthUser(), 10000);
+        setInterval(() => userService.cleanNotAuthUser(), 10000000);
     } catch (e) {
         console.log(e)
     }
